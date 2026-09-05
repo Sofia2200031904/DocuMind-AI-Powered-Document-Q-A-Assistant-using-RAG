@@ -187,10 +187,5 @@ Record a short walkthrough showing:
 
 Upload the video to YouTube or LinkedIn and replace the Demo link at the top with the public URL. For a GitHub-hosted demo, add an MP4 or GIF under `docs/demo/` and embed it using a linked thumbnail.
 
-## 👩‍💻 Author
 
-**Sofia** — [GitHub](https://github.com/Sofia2200031904)
 
-## License
-
-Add your preferred license before publishing. MIT is a suitable default for an open-source portfolio project.
