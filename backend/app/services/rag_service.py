@@ -92,6 +92,15 @@ class RAGService:
 
     def ask(self, question: str, history: list[dict[str, str]] | None = None) -> GroundedAnswer:
         try:
+            # Keep ordinary conversation friendly and independent of document retrieval.
+            normalized = question.strip().lower().rstrip('!?.,')
+            greetings = {'hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening'}
+            if normalized in greetings:
+                return GroundedAnswer(answer="Hi! I'm DocuMind. Upload a document and I’ll help you understand it, summarize it, or answer follow-up questions.", sources=[], refused=False)
+            if normalized in {'thanks', 'thank you', 'thx'}:
+                return GroundedAnswer(answer="You’re welcome! Ask me anything about your uploaded document whenever you’re ready.", sources=[], refused=False)
+            if normalized in {'what can you do', 'help', 'what do you do'}:
+                return GroundedAnswer(answer="I can summarize your document, answer document-based questions, explain terms in context, and continue with follow-up questions. Upload a PDF or TXT file to begin.", sources=[], refused=False)
             state = {'question': question, 'history': json.dumps((history or [])[-6:], ensure_ascii=False)}
             return self.chain.invoke(state)
         except OutputParserException:
