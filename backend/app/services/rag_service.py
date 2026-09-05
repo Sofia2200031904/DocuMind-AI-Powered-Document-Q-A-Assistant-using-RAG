@@ -99,6 +99,8 @@ class RAGService:
                 return GroundedAnswer(answer="Hi! I'm DocuMind. Upload a document and I’ll help you understand it, summarize it, or answer follow-up questions.", sources=[], refused=False)
             if normalized in {'thanks', 'thank you', 'thx'}:
                 return GroundedAnswer(answer="You’re welcome! Ask me anything about your uploaded document whenever you’re ready.", sources=[], refused=False)
+            if normalized in {'how are you', 'how are you doing', 'who are you', 'tell me about yourself', 'about yourself'}:
+                return GroundedAnswer(answer="I’m DocuMind, your friendly document and knowledge assistant. I can summarize files, explain terms, answer questions, and continue follow-up conversations. I’m doing great and ready to help!", sources=[], refused=False)
             if normalized in {'what can you do', 'help', 'what do you do'}:
                 return GroundedAnswer(answer="I can summarize your document, answer document-based questions, explain terms in context, and continue with follow-up questions. Upload a PDF or TXT file to begin.", sources=[], refused=False)
             state = {'question': question, 'history': json.dumps((history or [])[-6:], ensure_ascii=False)}
