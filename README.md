@@ -20,6 +20,43 @@ DocuMind turns documents into a searchable knowledge base. It validates uploads,
 
 ## ✨ Features
 
+### What you can ask
+
+DocuMind supports document questions and general conversation. Generated answers require a working model provider; the deployed OpenAI configuration currently needs API credits before these answers can be tested successfully.
+
+| Capability | Example message |
+|---|---|
+| Document summary | `Give me a summary of the document` |
+| Find information in an uploaded file | `List the certificates mentioned in this document` |
+| Explain a term in context | `What does this word mean in the document?` |
+| Follow up on an answer | `Explain the second point in simpler words` |
+| General knowledge | `What is machine learning?` |
+
+Document answers can include source references. General answers are instructed to identify themselves as general knowledge. Missing document evidence can produce a refusal. Answer accuracy is not guaranteed; check important claims against the original document.
+
+### Built-in messages that do not call the AI API
+
+The following exact phrases receive preset friendly responses without consuming API credits, provided the backend starts successfully:
+
+| Messages | Response type |
+|---|---|
+| `hi`, `hello`, `hey`, `good morning`, `good afternoon`, `good evening` | Greeting and invitation to upload a document |
+| `thanks`, `thank you`, `thx` | Friendly acknowledgement |
+| `how are you`, `how are you doing`, `who are you`, `tell me about yourself`, `about yourself` | DocuMind introduction |
+| `what can you do`, `help`, `what do you do` | Description of document assistance capabilities |
+
+Capitalization and trailing `!`, `?`, `.`, or `,` are ignored. These are exact phrase matches, not a general offline chatbot. For example, `How are you, can you tell me about yourself?` is a combined question and still uses the AI API.
+
+### Current limitations
+
+- OpenAI requests currently fail with `429 insufficient_quota` when the account has no API credits. Creating another key does not fix the credit balance.
+- Follow-ups receive only the most recent six conversation messages. Retrieval still searches the current question, so vague references may miss relevant evidence.
+- Chat history is stored in the browser. Separate conversations and document isolation are not implemented; the New chat button currently clears the visible question and answer only.
+- A visual document preview is not implemented.
+- Uploaded files/index data on the current Render setup can be lost after a redeploy; upload the document again if needed.
+
+### Other implemented features
+
 - PDF and UTF-8 TXT upload with validation
 - Semantic retrieval using Sentence Transformers and FAISS
 - Grounded answers through a LangChain LCEL pipeline
