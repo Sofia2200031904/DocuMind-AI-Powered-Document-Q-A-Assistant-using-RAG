@@ -5,11 +5,11 @@ from app.models.answers import AnswerDraft
 
 
 def create_local_model(settings):
-    if settings.gemini_api_key:
-        from langchain_google_genai import ChatGoogleGenerativeAI
-        return ChatGoogleGenerativeAI(
-            model=settings.gemini_model,
-            google_api_key=settings.gemini_api_key,
+    if settings.openai_api_key:
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(
+            model=settings.openai_model,
+            api_key=settings.openai_api_key,
             temperature=0,
             max_output_tokens=1024,
             timeout=settings.llm_timeout_seconds,
