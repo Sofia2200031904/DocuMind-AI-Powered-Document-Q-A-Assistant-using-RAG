@@ -8,4 +8,7 @@ faiss-cpu>=1.10,<2
 numpy>=2,<3
 pypdf>=5,<7
 filelock>=3.17,<4
+fastapi>=0.115,<1
+uvicorn[standard]>=0.34,<1
+python-multipart>=0.0.20,<1
 pytest>=8,<10

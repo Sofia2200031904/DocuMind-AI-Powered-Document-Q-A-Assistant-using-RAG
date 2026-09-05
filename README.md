@@ -1,8 +1,13 @@
-# DocuMind — Phase 1
+# DocuMind — Phases 1 and 2
 
 Document ingestion and semantic retrieval using local Sentence Transformers and
-persistent FAISS. **Phase 1 only:** this repository does not yet generate answers,
-expose HTTP routes, or contain a frontend. All four sample documents are fictional.
+persistent FAISS, plus a genuine LangChain LCEL pipeline for local answers with
+source citations. This is a CLI application; HTTP routes and a frontend are still
+pending. All four sample documents are fictional.
+
+**To ask for an answer**, see [the Phase 2 run instructions](docs/phase-2.md).
+The new command is `python -m app.cli ask "your question"` from backend, with
+Ollama running. The existing `query` command below returns raw retrieved evidence.
 
 Keyword search misses paraphrases. Dense embeddings place related text near each
 other numerically, allowing a question to retrieve passages without identical words.
@@ -103,12 +108,14 @@ four samples. The leave-policy query retrieved employee_handbook.txt first at
 cosine similarity **0.665349**, above the default 0.65 threshold. Full observed
 rankings and test details are recorded in the learning guide.
 
-## Next phase
+## Phase 2 and next phase
 
-Phase 2 adds a genuine LangChain LCEL retrieval/context/prompt/model/parser chain,
-grounded prompt and programmatic citations, then demonstrates three questions.
-Implementation waits for user confirmation. Provider abstraction, tools, memory,
-context budgeting, audit, APIs, React, evaluation, and CI follow the requested phases.
+Phase 2 implements the LCEL retrieval/context/prompt/model/parser chain, grounded
+prompt, validated citation IDs, and metadata-derived sources. See
+[docs/phase-2.md](docs/phase-2.md) for every new file's purpose, runnable commands,
+tests, and limitations. Phase 3 will add the full OpenAI/Ollama provider abstraction
+after confirmation. Tools, memory, context budgeting, audit, APIs, React, evaluation,
+and CI follow the requested phases.
 
 ## Technical references
 
