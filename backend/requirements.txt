@@ -1,12 +1,8 @@
 pydantic-settings>=2.8,<3
-# Render is CPU-only; avoid the large CUDA dependency tree.
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.14.0+cpu
 langchain-text-splitters>=0.3,<2
 langchain>=1,<2
 langchain-core>=1,<2
 langchain-ollama>=1,<2
-sentence-transformers>=3.4,<6
 faiss-cpu>=1.10,<2
 numpy>=2,<3
 pypdf>=5,<7
