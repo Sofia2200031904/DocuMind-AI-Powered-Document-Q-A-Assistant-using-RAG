@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     max_upload_mb: int = Field(default=20, ge=1)
     ollama_model: str = 'llama3.1'
     ollama_base_url: str = 'http://localhost:11434'
+    gemini_api_key: str | None = None
+    gemini_model: str = 'gemini-2.5-flash'
     llm_timeout_seconds: float = Field(default=120, gt=0, le=600)
 
     @model_validator(mode='after')
