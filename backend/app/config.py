@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     top_k: int = Field(default=5, ge=1, le=100)
     retrieval_score_threshold: float = Field(default=0.65, ge=-1, le=1)
     max_upload_mb: int = Field(default=20, ge=1)
+    ollama_model: str = 'llama3.1'
+    ollama_base_url: str = 'http://localhost:11434'
+    llm_timeout_seconds: float = Field(default=120, gt=0, le=600)
 
     @model_validator(mode='after')
     def validate_settings(self):
