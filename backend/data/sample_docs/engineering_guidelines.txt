@@ -1,0 +1,7 @@
+Fictional sample: Northstar Engineering Guidelines
+
+Code review
+Every production change requires approval from two reviewers. The author cannot approve their own change. All automated tests must pass before a pull request is merged.
+
+Incident response
+Severity-one incidents require acknowledgment within fifteen minutes. The incident lead publishes a written review within three business days after resolution.

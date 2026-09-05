@@ -1,0 +1,7 @@
+Fictional sample: Harbor Public API Documentation
+
+Rate limits
+The Harbor API allows 120 requests per minute per access token. Exceeding this limit returns HTTP 429. Clients should wait for the number of seconds in the Retry-After response header before retrying.
+
+Pagination
+List endpoints return at most 50 records per page. Pass the next_cursor value as the cursor query parameter to retrieve the following page.
