@@ -1,124 +1,196 @@
-# DocuMind — Phases 1 and 2
+# 🧠 DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG
 
-Document ingestion and semantic retrieval using local Sentence Transformers and
-persistent FAISS, plus a genuine LangChain LCEL pipeline for local answers with
-source citations. This is a CLI application; HTTP routes and a frontend are still
-pending. All four sample documents are fictional.
 
-**To ask for an answer**, see [the Phase 2 run instructions](docs/phase-2.md).
-The new command is `python -m app.cli ask "your question"` from backend, with
-Ollama running. The existing `query` command below returns raw retrieved evidence.
+DocuMind is a document-grounded Q&A assistant. Upload PDF or TXT files, ask natural-language questions, and receive answers supported by retrieved document evidence and source citations.
 
-Keyword search misses paraphrases. Dense embeddings place related text near each
-other numerically, allowing a question to retrieve passages without identical words.
-Retrieval finds candidate evidence; it does not prove that the evidence answers a question.
+[Demo](#-demo-video) · [GitHub](https://github.com/Sofia2200031904/DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG) · [License](#license)
 
-```text
-PDF/TXT bytes -> validation -> text per page -> recursive character chunks
-                                                   |
-                                       metadata + UUIDs
-                                                   |
-                                     Sentence Transformers (CPU)
-                                                   |
-                                      normalized float32 vectors
-                                                   |
-                                        FAISS IndexFlatIP
-                                                   ^
-question -> same embedding model -> normalized vector
-                                                   |
-                            top-k -> cosine threshold -> text + metadata + score
+## 📸 Screenshots
+
+Add screenshots to `docs/images/` and embed them here:
+
+```markdown
+![DocuMind chat interface](docs/images/chat.png)
 ```
 
-## Run on Windows PowerShell
+## 🎯 Overview
 
-Run from the repository root. Python 3.11+ is required; Python 3.13 was selected for
-the development environment. First installation requires internet for packages
-and the embedding model. No API key, paid service, or Ollama is needed in Phase 1.
+DocuMind turns documents into a searchable knowledge base. It validates uploads, extracts text, preserves page metadata, creates semantic embeddings, retrieves relevant chunks, and generates a grounded response.
+
+## ✨ Features
+
+- PDF and UTF-8 TXT upload with validation
+- Semantic retrieval using Sentence Transformers and FAISS
+- Grounded answers through a LangChain LCEL pipeline
+- Source document and page citations
+- Refusal when evidence does not support an answer
+- Purple, notebook-style web interface
+- Browser chat history with clickable previous questions
+- CLI, FastAPI, Docker, Render, and Vercel configuration
+
+## 🏗️ Architecture
+
+```text
+Frontend (Vercel) → FastAPI API (Render) → Document service → Embeddings → FAISS
+                                             ↓
+                                      Retriever → Prompt → Ollama → Answer + sources
+```
+
+## 🔄 How RAG Works
+
+1. Upload bytes are validated and parsed.
+2. Text is split into overlapping chunks with provenance metadata.
+3. Chunks are embedded and stored in a persistent FAISS index.
+4. The question is embedded using the same model.
+5. Similar chunks above the confidence threshold are retrieved.
+6. The language model answers only from those chunks.
+7. Application-owned metadata is attached as citations.
+
+## 🛠️ Tech Stack
+
+Python 3.13 · FastAPI · LangChain LCEL · Ollama · Sentence Transformers · FAISS · React · Vite · Docker · Render · Vercel
+
+## 📁 Project Structure
+
+```text
+backend/app/       CLI, API, models, and RAG services
+backend/tests/     Automated tests
+backend/data/      Sample documents and local vector storage
+frontend/          React/Vite web application
+docs/              Phase documentation and learning notes
+render.yaml        Render deployment configuration
+```
+
+## ⚙️ Installation
+
+From the repository root:
 
 ```powershell
 py -3.13 -m venv .venv313
-.\.venv313\Scripts\python.exe -m pip install -r backend/requirements.txt
-Copy-Item .env.example .env
-$env:HF_HOME = "$PWD/.model-cache"
-Set-Location backend
-..\.venv313\Scripts\python.exe -m app.cli ingest data/sample_docs
-..\.venv313\Scripts\python.exe -m app.cli documents
-..\.venv313\Scripts\python.exe -m app.cli query "How many days of paid annual leave do employees receive?"
+.\.venv313\Scripts\python.exe -m pip install -r backend\requirements.txt
+cd frontend
+npm install
+```
+
+## 🔐 Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+```text
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+VECTOR_STORE_PATH=backend/data/vector_store
+OLLAMA_MODEL=llama3.1
+OLLAMA_BASE_URL=http://localhost:11434
+```
+
+Never commit `.env`, API keys, or private credentials.
+
+## 🚀 Running the Application
+
+Start Ollama and the model:
+
+```powershell
+ollama serve
+ollama pull llama3.1
+```
+
+Start the backend in PowerShell window 1:
+
+```powershell
+& ".\.venv313\Scripts\python.exe" -m uvicorn app.api:app --app-dir backend --reload --host 127.0.0.1 --port 8000
+```
+
+Start the frontend in PowerShell window 2:
+
+```powershell
+cd frontend
+$env:VITE_API_URL="http://127.0.0.1:8000"
+node ".\node_modules\vite\bin\vite.js"
+```
+
+Open `http://localhost:5173`. API documentation is available at `http://127.0.0.1:8000/docs`.
+
+## 💬 Example Usage
+
+Upload a document, then ask:
+
+```text
+What are the main responsibilities described in this document?
+Which policy applies to annual leave?
+Summarize the document in five bullet points.
+```
+
+Questions unrelated to the uploaded evidence are refused instead of answered from outside knowledge.
+
+## 🧠 GenAI Concepts
+
+DocuMind demonstrates embeddings, vector similarity, chunking, metadata provenance, retrieval-augmented generation, prompt grounding, structured output parsing, citation validation, and confidence thresholds.
+
+## 🛡️ Governance & Guardrails
+
+- The model receives only retrieved document evidence.
+- Evidence is treated as untrusted data, not instructions.
+- Invalid or invented citation IDs are rejected.
+- Unsupported questions return a refusal.
+- Upload size, file type, encoding, and PDF encryption are validated.
+- Documents and indexes are stored locally unless replaced with production storage.
+
+## 📊 Evaluation
+
+Evaluation should measure retrieval recall, answer faithfulness, citation correctness, refusal accuracy, latency, and cost using a representative question/evidence set.
+
+## 🧪 Testing
+
+From `backend`:
+
+```powershell
 ..\.venv313\Scripts\python.exe -m pytest
 ```
 
-If pip bootstrapping fails and uv is available (as on this workstation):
+The test suite covers chunking, RAG grounding, retrieval, persistence, validation, model compatibility, and failed snapshot safety.
 
-```powershell
-uv --cache-dir .uv-cache venv --python 3.13 .venv313
-uv --cache-dir .uv-cache pip install --python .venv313/Scripts/python.exe -r backend/requirements.txt
-```
+## 🔄 CI/CD
 
-To inspect raw rankings even when scores fall below the configured threshold:
+Pushes to GitHub can trigger Render backend deployment and Vercel frontend deployment. Configure the frontend variable `VITE_API_URL` to the deployed Render API URL.
 
-```powershell
-# From backend; diagnostic override only.
-..\.venv313\Scripts\python.exe -m app.cli query "How many days of paid annual leave do employees receive?" --top-k 3 --threshold -1
-```
+## 🗺️ Development Roadmap
 
-To index another file, pass its local path to `ingest`. Paths are a trusted CLI input;
-the parser accepts bytes and never derives an output path from an uploaded filename.
-PDF must contain extractable text; OCR and encrypted PDFs are unsupported. TXT must
-be UTF-8. Size is limited to 20 MiB by default. CLI failures return exit code 1.
+- [x] Document ingestion and semantic retrieval
+- [x] Grounded local RAG answers
+- [x] FastAPI API and web interface
+- [x] Vercel and Render deployment configuration
+- [ ] Hosted LLM provider abstraction
+- [ ] Authentication and multi-user workspaces
+- [ ] Production database and object storage
 
-## Configuration and persistence
+## 🚀 Future Improvements
 
-`.env` is loaded from the repository root regardless of your current directory.
-See `.env.example`. Chunk sizes and overlap are measured in **characters**, not
-tokens. Recursive splitting prefers paragraphs, lines, sentences, then words.
-Overlap is a target, not a guarantee across natural boundaries. Pages never mix.
-TXT page numbers are null; section is `Unknown` because there is no reliable
-section parser. The embedding service rejects texts exceeding the model's token
-limit rather than silently truncating them; lower CHUNK_SIZE if necessary.
+Streaming answers, persistent server-side chat history, document deletion and versioning, OCR, hybrid keyword/vector search, reranking, evaluation dashboards, rate limits, audit logs, and observability.
 
-FAISS uses exact inner-product search over normalized vectors: this equals cosine
-similarity. Larger scores are better, with a theoretical range of -1 to 1.
-The 0.65 threshold is an initial configuration, **not a calibrated confidence**.
-Empty results mean no candidate passed the threshold; answer refusal comes later.
+## 📚 Learning Resources
 
-The index stores vectors in `.faiss` files and chunk text/document records in JSON.
-A process lock prevents concurrent writes from losing updates. An atomic CURRENT
-pointer publishes a completed snapshot. Failed writes leave the prior snapshot
-readable. Old snapshots are retained, so disk use grows; compaction is future work.
-Metadata stores the model identity and rejects incompatible reuse. Changing model
-or embedding dimensions requires a fresh VECTOR_STORE_PATH and reingestion.
-Model names are recorded, but upstream model revisions are not pinned yet.
-Identical filename + content is skipped on reingestion; changed content is appended
-as a new document version. There is no delete/update operation in Phase 1.
+- [LangChain documentation](https://docs.langchain.com/)
+- [FAISS documentation](https://github.com/facebookresearch/faiss)
+- [Sentence Transformers](https://www.sbert.net/)
+- [FastAPI documentation](https://fastapi.tiangolo.com/)
+- [Retrieval-Augmented Generation](https://arxiv.org/abs/2005.11401)
 
-Only read trusted locally generated FAISS files. Documents and metadata are stored
-unencrypted locally. This is a production-oriented foundation, not a completed or
-internet-ready production service. Authentication, API limits, audit, deployment,
-and operational hardening remain for subsequent phases.
+## 🎬 Demo Video
 
-## Learning guide and checks
+Record a short walkthrough showing:
 
-See [docs/phase-1.md](docs/phase-1.md) for the full tree, responsibilities,
-dependencies, architecture rationale, and interview explanations for every file.
-Tests use deterministic embedding doubles with real FAISS and require no model
-download or API key. A real-model CLI run is a separate integration check.
+1. Starting the backend and frontend.
+2. Uploading a sample PDF/TXT file.
+3. Asking a document question.
+4. Showing the grounded answer and citations.
+5. Clicking a previous question in chat history.
 
-Verified September 5, 2026: **13 tests passed**. The actual MiniLM model indexed all
-four samples. The leave-policy query retrieved employee_handbook.txt first at
-cosine similarity **0.665349**, above the default 0.65 threshold. Full observed
-rankings and test details are recorded in the learning guide.
+Upload the video to YouTube or LinkedIn and replace the Demo link at the top with the public URL. For a GitHub-hosted demo, add an MP4 or GIF under `docs/demo/` and embed it using a linked thumbnail.
 
-## Phase 2 and next phase
+## 👩‍💻 Author
 
-Phase 2 implements the LCEL retrieval/context/prompt/model/parser chain, grounded
-prompt, validated citation IDs, and metadata-derived sources. See
-[docs/phase-2.md](docs/phase-2.md) for every new file's purpose, runnable commands,
-tests, and limitations. Phase 3 will add the full OpenAI/Ollama provider abstraction
-after confirmation. Tools, memory, context budgeting, audit, APIs, React, evaluation,
-and CI follow the requested phases.
+**Sofia** — [GitHub](https://github.com/Sofia2200031904)
 
-## Technical references
+## License
 
-- [Sentence Transformers encode API](https://www.sbert.net/docs/package_reference/sentence_transformer/model.html)
-- [FAISS indexes and cosine similarity](https://github.com/facebookresearch/faiss/wiki/Faiss-indexes)
-- [FAISS persistence](https://github.com/facebookresearch/faiss/wiki/Index-IO%2C-cloning-and-hyper-parameter-tuning)
+Add your preferred license before publishing. MIT is a suitable default for an open-source portfolio project.
