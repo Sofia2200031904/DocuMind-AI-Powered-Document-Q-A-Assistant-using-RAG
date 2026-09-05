@@ -2,7 +2,9 @@
 
 DocuMind is a document-grounded Q&A assistant. Upload PDF or TXT files, ask natural-language questions, and receive answers supported by retrieved document evidence and source citations.
 
-[GitHub](https://github.com/Sofia2200031904/DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG) · [License](#license)
+[Live Frontend](https://docu-mind-ai-powered-document-q-a-assistant-using-pa5z83l48.vercel.app/) · [Backend Health](https://documind-ai-powered-document-q-a-rnfd.onrender.com/health) · [GitHub](https://github.com/Sofia2200031904/DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG) · [License](#license)
+
+> The frontend is deployed on Vercel and the FastAPI backend is deployed on Render. The backend root URL may show `404 Not Found`; use the `/health` link to verify that the API is running.
 
 ## 📸 Screenshots
 
@@ -130,6 +132,14 @@ VITE_API_URL=https://your-render-service.onrender.com
 ```
 
 Then deploy and test upload and Q&A against the Render URL.
+
+### Current deployment links
+
+- Frontend: https://docu-mind-ai-powered-document-q-a-assistant-using-pa5z83l48.vercel.app/
+- Backend API health check: https://documind-ai-powered-document-q-a-rnfd.onrender.com/health
+- Backend API documentation: https://documind-ai-powered-document-q-a-rnfd.onrender.com/docs
+
+The deployed backend requires a funded OpenAI API key for answer generation. If the OpenAI account has no credits, uploads may succeed but questions return a `429 insufficient_quota` error.
 
 ## 💬 Example Usage
 
