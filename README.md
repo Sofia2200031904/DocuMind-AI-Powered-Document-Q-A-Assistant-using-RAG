@@ -1,9 +1,8 @@
-# 🧠 DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG
-
+# 🧠 DocuMind
 
 DocuMind is a document-grounded Q&A assistant. Upload PDF or TXT files, ask natural-language questions, and receive answers supported by retrieved document evidence and source citations.
 
-[Demo](#-demo-video) · [GitHub](https://github.com/Sofia2200031904/DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG) · [License](#license)
+[GitHub](https://github.com/Sofia2200031904/DocuMind-AI-Powered-Document-Q-A-Assistant-using-RAG) · [License](#license)
 
 ## 📸 Screenshots
 
@@ -31,7 +30,7 @@ DocuMind turns documents into a searchable knowledge base. It validates uploads,
 ## 🏗️ Architecture
 
 ```text
-Frontend (Vercel) → FastAPI API (Render) → Document service → Embeddings → FAISS
+React Frontend → FastAPI API → Document service → Embeddings → FAISS
                                              ↓
                                       Retriever → Prompt → Ollama → Answer + sources
 ```
@@ -110,6 +109,28 @@ node ".\node_modules\vite\bin\vite.js"
 
 Open `http://localhost:5173`. API documentation is available at `http://127.0.0.1:8000/docs`.
 
+## ☁️ Deployment
+
+### Render backend
+
+Create a Render Web Service connected to this repository. Use `backend` as the root directory, `pip install -r requirements.txt` as the build command, and:
+
+```text
+uvicorn app.api:app --host 0.0.0.0 --port $PORT
+```
+
+Add the variables from `.env.example`. The included `render.yaml` can also be used as a Blueprint. Local Ollama is not normally reachable from Render; configure a hosted LLM provider before public deployment.
+
+### Vercel frontend
+
+Import the repository into Vercel, set the root directory to `frontend`, build command to `npm run build`, and output directory to `dist`. Add:
+
+```text
+VITE_API_URL=https://your-render-service.onrender.com
+```
+
+Then deploy and test upload and Q&A against the Render URL.
+
 ## 💬 Example Usage
 
 Upload a document, then ask:
@@ -137,7 +158,7 @@ DocuMind demonstrates embeddings, vector similarity, chunking, metadata provenan
 
 ## 📊 Evaluation
 
-Evaluation should measure retrieval recall, answer faithfulness, citation correctness, refusal accuracy, latency, and cost using a representative question/evidence set.
+A 10–15 question evaluation harness is planned. No scores are claimed until it is implemented and run. Planned metrics are Retrieval Recall@K, Citation Accuracy, Answer Faithfulness, Refusal Accuracy, and Response Latency.
 
 ## 🧪 Testing
 
@@ -151,7 +172,7 @@ The test suite covers chunking, RAG grounding, retrieval, persistence, validatio
 
 ## 🔄 CI/CD
 
-Pushes to GitHub can trigger Render backend deployment and Vercel frontend deployment. Configure the frontend variable `VITE_API_URL` to the deployed Render API URL.
+Render and Vercel deployment configuration is included. Automatic deployment can be enabled after connecting the GitHub repository. A CI workflow is planned.
 
 ## 🗺️ Development Roadmap
 
@@ -160,6 +181,12 @@ Pushes to GitHub can trigger Render backend deployment and Vercel frontend deplo
 - [x] FastAPI API and web interface
 - [x] Vercel and Render deployment configuration
 - [ ] Hosted LLM provider abstraction
+- [ ] Tool/function calling
+- [ ] Conversation memory
+- [ ] Token-budget-aware context management
+- [ ] Audit logging
+- [ ] Evaluation harness
+- [ ] CI/CD workflow
 - [ ] Authentication and multi-user workspaces
 - [ ] Production database and object storage
 
@@ -185,7 +212,16 @@ Record a short walkthrough showing:
 4. Showing the grounded answer and citations.
 5. Clicking a previous question in chat history.
 
-Upload the video to YouTube or LinkedIn and replace the Demo link at the top with the public URL. For a GitHub-hosted demo, add an MP4 or GIF under `docs/demo/` and embed it using a linked thumbnail.
+Demo video: to be added after recording or producing a walkthrough. When ready, add the public YouTube or LinkedIn URL here:
 
+```markdown
+[Watch the DocuMind Demo](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+```
 
+## 👩‍💻 Author
 
+**Sofia** — [GitHub](https://github.com/Sofia2200031904)
+
+## License
+
+Add your preferred license before publishing. MIT is a suitable default for an open-source portfolio project.
