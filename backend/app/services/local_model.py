@@ -11,7 +11,7 @@ def create_local_model(settings):
             model=settings.openai_model,
             api_key=settings.openai_api_key,
             temperature=0,
-            max_output_tokens=1024,
+            max_tokens=1024,
             timeout=settings.llm_timeout_seconds,
         )
     return ChatOllama(
