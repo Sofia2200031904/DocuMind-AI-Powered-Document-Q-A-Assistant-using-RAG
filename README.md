@@ -251,9 +251,7 @@ Streaming answers, persistent server-side chat history, document deletion and ve
 
 ## 🎬 Demo Video
 
-[Watch or download the website walkthrough](docs/videos/documind-website-walkthrough.mp4)
-
-This real browser recording shows uploading `DataAnalytics.pdf`, receiving a greeting, and asking two document questions. It uses the local frontend connected to the live Render backend. The questions display the actual API-credit error; successful generated answers are not demonstrated. The video is approximately one minute long and has no audio.
+A demo video will be published after review and approval.
 
 
 
