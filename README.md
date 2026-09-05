@@ -251,19 +251,9 @@ Streaming answers, persistent server-side chat history, document deletion and ve
 
 ## 🎬 Demo Video
 
-Record a short walkthrough showing:
+[Watch or download the website walkthrough](docs/videos/documind-website-walkthrough.mp4)
 
-1. Starting the backend and frontend.
-2. Uploading a sample PDF/TXT file.
-3. Asking a document question.
-4. Showing the grounded answer and citations.
-5. Clicking a previous question in chat history.
-
-Demo video: to be added after recording or producing a walkthrough. When ready, add the public YouTube or LinkedIn URL here:
-
-```markdown
-[Watch the DocuMind Demo](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
-```
+This real browser recording shows uploading `DataAnalytics.pdf`, receiving a greeting, and asking two document questions. It uses the local frontend connected to the live Render backend. The questions display the actual API-credit error; successful generated answers are not demonstrated. The video is approximately one minute long and has no audio.
 
 
 
