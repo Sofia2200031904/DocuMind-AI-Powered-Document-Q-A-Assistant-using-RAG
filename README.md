@@ -218,10 +218,5 @@ Demo video: to be added after recording or producing a walkthrough. When ready, 
 [Watch the DocuMind Demo](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
 ```
 
-## 👩‍💻 Author
 
-**Sofia** — [GitHub](https://github.com/Sofia2200031904)
 
-## License
-
-Add your preferred license before publishing. MIT is a suitable default for an open-source portfolio project.
