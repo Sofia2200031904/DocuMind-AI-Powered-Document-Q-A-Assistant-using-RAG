@@ -249,9 +249,8 @@ Streaming answers, persistent server-side chat history, document deletion and ve
 - [FastAPI documentation](https://fastapi.tiangolo.com/)
 - [Retrieval-Augmented Generation](https://arxiv.org/abs/2005.11401)
 
-## 🎬 Demo Video
-
-A demo video will be published after review and approval.
+## 🎬 Project Url
+[https://docu-mind-ai-powered-document-q-a-assistant-using-pa5z83l48.vercel.app/](https://docu-mind-ai-powered-document-q-a-assistant-using-pa5z83l48.vercel.app/)
 
 
 
