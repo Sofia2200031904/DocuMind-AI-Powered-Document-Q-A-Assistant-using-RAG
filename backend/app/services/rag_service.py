@@ -66,7 +66,7 @@ class RAGService:
         parser = PydanticOutputParser(pydantic_object=AnswerDraft)
         prompt = ChatPromptTemplate.from_messages([
             ('system', SYSTEM_PROMPT),
-            ('human', 'Question:\n{question}\n\nDocument evidence (JSON):\n{context}'),
+            ('human', 'Conversation context (use only to resolve references such as "it" or "that"):\n{history}\n\nQuestion:\n{question}\n\nDocument evidence (JSON):\n{context}'),
         ]).partial(format_instructions=parser.get_format_instructions())
         generate = prompt | model | parser
         grounded = (RunnableLambda(format_context)
@@ -81,14 +81,19 @@ class RAGService:
         )
 
     @staticmethod
-    def _question(question: str) -> dict:
+    def _question(state: dict | str) -> dict:
+        if isinstance(state, str):
+            question, history = state, '[]'
+        else:
+            question, history = state.get('question'), state.get('history', '[]')
         if not isinstance(question, str) or not question.strip():
             raise ValueError('Question cannot be empty')
-        return {'question': question.strip()}
+        return {'question': question.strip(), 'history': history}
 
-    def ask(self, question: str) -> GroundedAnswer:
+    def ask(self, question: str, history: list[dict[str, str]] | None = None) -> GroundedAnswer:
         try:
-            return self.chain.invoke(question)
+            state = {'question': question, 'history': json.dumps((history or [])[-6:], ensure_ascii=False)}
+            return self.chain.invoke(state)
         except OutputParserException:
             # Malformed or schema-invalid output is never presented as grounded.
             return refusal()

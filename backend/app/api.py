@@ -15,6 +15,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 
 class Question(BaseModel):
     question: str
+    history: list[dict[str, str]] = []
 
 @lru_cache
 def services():
@@ -48,7 +49,7 @@ def query(payload: Question):
     try:
         from app.services.local_model import create_local_model
         from app.services.rag_service import RAGService
-        answer = RAGService(RetrievalService(embeddings, store, settings), create_local_model(settings)).ask(payload.question)
+        answer = RAGService(RetrievalService(embeddings, store, settings), create_local_model(settings)).ask(payload.question, payload.history)
         return answer.model_dump()
     except Exception as exc:
         raise HTTPException(status_code=503, detail=f"Answer service unavailable: {exc}") from exc
